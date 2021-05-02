@@ -11,7 +11,11 @@ const Statistics = ({ meta }) => {
       <Statistic name="Bad" value={meta.bad}></Statistic>
       <Statistic name="Total" value={meta.total}></Statistic>
       <Statistic name="Average" value={meta.average}></Statistic>
-      <Statistic name="Positive" value={meta.percentPositive}></Statistic>
+      <Statistic
+        name="Positive"
+        value={meta.percentPositive}
+        asPercent={true}
+      ></Statistic>
     </div>
   );
 };
