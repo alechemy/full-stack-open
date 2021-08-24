@@ -23,11 +23,19 @@ const PersonForm = ({ handleSubmit }) => {
     <form onSubmit={handleFormSubmit}>
       <div>
         name:
-        <input type="text" value={newPerson.name} onChange={handleNameChange} />
+        <input
+          type="text"
+          name="nameSearch"
+          autoComplete="off"
+          value={newPerson.name}
+          onChange={handleNameChange}
+        />
         <br />
         number:
         <input
           type="text"
+          name="number"
+          autoComplete="off"
           value={newPerson.number}
           onChange={handleNumberChange}
         />
