@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const PersonForm = ({ handleSubmit }) => {
   const [newPerson, setNewPerson] = useState({ name: '', number: '' });

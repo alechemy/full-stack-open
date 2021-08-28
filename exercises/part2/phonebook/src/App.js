@@ -3,12 +3,22 @@ import { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 
 import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [nameFilter, setNameFilter] = useState('');
+  const [notification, setNotification] = useState(null);
+  useEffect(() => {
+    if (notification?.message) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   const personsToShow =
     nameFilter.length === 0
@@ -43,12 +53,23 @@ const App = () => {
                 person.id === returnedPerson.id ? returnedPerson : person
               )
             )
-          );
+          )
+          .catch((error) => {
+            setNotification({
+              message: `ERROR: Information of '${existingPerson.name}' has already been removed from the server!`,
+              type: 'error',
+            });
+            setPersons(persons.filter((p) => p.id !== existingPerson.id));
+          });
       }
     } else {
-      personService
-        .create(newPerson)
-        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+      personService.create(newPerson).then((returnedPerson) => {
+        setNotification({
+          message: `Added '${returnedPerson.name}'`,
+          type: 'success',
+        });
+        setPersons(persons.concat(returnedPerson));
+      });
     }
   };
 
@@ -62,6 +83,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       filter shown with:
       <Filter
         filter={nameFilter}
