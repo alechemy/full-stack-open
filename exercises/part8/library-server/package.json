@@ -1,5 +1,5 @@
 {
-  "name": "graphql-library",
+  "name": "library-server",
   "version": "1.0.0",
   "description": "",
   "main": "node library-backend.js",

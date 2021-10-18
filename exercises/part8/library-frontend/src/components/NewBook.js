@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries';
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('');
@@ -6,6 +8,16 @@ const NewBook = (props) => {
   const [published, setPublished] = useState('');
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
+  const [addBook] = useMutation(ADD_BOOK, {
+    onError: (error) => {
+      console.error(error);
+    },
+    // Refetch all authors and all books after adding a book.
+    // TO-DO: There is probably a way to only re-run the ALL_AUTHORS
+    // query when we know that the user has added a book by a
+    // new author.
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+  });
 
   if (!props.show) {
     return null;
@@ -14,8 +26,11 @@ const NewBook = (props) => {
   const submit = async (event) => {
     event.preventDefault();
 
-    console.log('add book...');
+    addBook({
+      variables: { title, author, genres, published: parseInt(published) },
+    });
 
+    // Reset form
     setTitle('');
     setPublished('');
     setAuthor('');
