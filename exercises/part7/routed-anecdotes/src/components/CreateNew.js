@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { useField } from '../hooks';
 
 const CreateNew = (props) => {
-  const content = useField('content', 'text');
-  const author = useField('author', 'text');
-  const info = useField('info', 'text');
+  const { clear: clearContent, ...content } = useField('content', 'text');
+  const { clear: clearAuthor, ...author } = useField('author', 'text');
+  const { clear: clearInfo, ...info } = useField('info', 'text');
   const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -17,6 +17,12 @@ const CreateNew = (props) => {
       votes: 0,
     });
     history.push('/');
+  };
+
+  const reset = () => {
+    clearContent();
+    clearAuthor();
+    clearInfo();
   };
 
   return (
@@ -36,6 +42,9 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button type="button" onClick={reset}>
+          reset
+        </button>
       </form>
     </div>
   );
