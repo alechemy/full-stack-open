@@ -3,20 +3,19 @@ const Country = ({ country }) => {
     return null;
   }
 
-  if (!country.found) {
+  if (!country.data) {
     return <div>not found...</div>;
   }
 
+  const { name, capital, population, flag } = country.data;
+
   return (
     <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div>
-      <img
-        src={country.data.flag}
-        height="100"
-        alt={`flag of ${country.data.name}`}
-      />
+      <h3>{name}</h3>
+      <div>Capital: {capital} </div>
+      <div>Population: {population}</div>
+      <br />
+      <img src={flag} height="100" alt={`flag of ${name}`} />
     </div>
   );
 };
