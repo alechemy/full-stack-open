@@ -1,4 +1,6 @@
 const { v1: uuid } = require('uuid');
+const { PubSub } = require('graphql-subscriptions');
+const pubsub = new PubSub();
 
 let authors = [
   {
@@ -120,6 +122,9 @@ const resolvers = {
 
       const book = { title, author, genres, published, id: uuid() };
       books = books.concat(book);
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: book });
+
       return book;
     },
     editAuthor: (_root, { name, setBornTo }) => {
@@ -136,6 +141,11 @@ const resolvers = {
       );
 
       return updatedAuthor;
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
     },
   },
 };
